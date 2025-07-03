@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../imc/imc_module.dart';
+import '../init/init_module.dart';
 import 'core_module.dart';
 
 class AppModule extends Module {
@@ -18,7 +18,7 @@ class AppModule extends Module {
   void routes(RouteManager r) {
     super.routes(r);
 
-    r.module("/", module: ImcModule());
+    r.module("/", module: InitModule());
   }
 
   @override

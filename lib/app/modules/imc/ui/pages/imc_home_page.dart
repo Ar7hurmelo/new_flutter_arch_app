@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../viewmodels/imc_viewmodel.dart';
+import '../viewmodels/imc_viewmodel.dart';
 
 class ImcHomePage extends StatefulWidget {
   const ImcHomePage({super.key});
