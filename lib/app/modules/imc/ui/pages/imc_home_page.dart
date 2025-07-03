@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:new_flutter_arch_app/app/repositories/local_imc_repository.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-import '../viewmodels/imc_viewmodel.dart';
+import '../../viewmodels/imc_viewmodel.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ImcHomePage extends StatefulWidget {
+  const ImcHomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ImcHomePage> createState() => _ImcHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final imcViewmodel = ImcViewmodel(imcRepository: LocalImcRepositoryImpl());
+class _ImcHomePageState extends State<ImcHomePage> {
+  final imcViewmodel = Modular.get<ImcViewmodel>();
 
   @override
   void initState() {
