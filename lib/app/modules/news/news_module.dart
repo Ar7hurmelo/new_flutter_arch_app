@@ -2,6 +2,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app/app_module.dart';
+import 'repositories/i_news_repository.dart';
+import 'repositories/impl/news_repository_impl.dart';
+import 'services/i_news_service.dart';
+import 'services/impl/news_service_impl.dart';
 import 'ui/pages/news_home_page.dart';
 import 'ui/viewmodels/news_viewmodel.dart';
 
@@ -15,7 +19,11 @@ class NewsModule extends Module {
   void binds(Injector i) {
     super.binds(i);
 
-    i.addLazySingleton<NewsViewmodel>(() => NewsViewmodel());
+    i.addLazySingleton<INewsService>(() => NewsServiceImpl(apiService: i()));
+    i.addLazySingleton<INewsRepository>(
+      () => NewsRepositoryImpl(iNewsService: i()),
+    );
+    i.add(() => NewsViewmodel(iNewsRepository: i()));
   }
 
   @override

@@ -1,5 +1,5 @@
-import '../../../shared/result.dart';
-import 'imc_repository.dart';
+import '../../../../shared/result.dart';
+import '../imc_repository.dart';
 
 class LocalImcRepositoryImpl implements ImcRepository {
   @override

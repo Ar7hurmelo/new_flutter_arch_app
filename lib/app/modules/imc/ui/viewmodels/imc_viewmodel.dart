@@ -39,7 +39,6 @@ class ImcViewmodel extends ChangeNotifier {
     );
 
     notifyListeners();
-
     return result;
   }
 }

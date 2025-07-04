@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class ApiService {
   final apiKey = 'e33cd63bcf644a50bb76172f9d646f16';
-  final url =
-      'https://newsapi.org/v2/top-headlines?country=us&apiKey=e33cd63bcf644a50bb76172f9d646f16';
+  final url = 'https://newsapi.org/v2';
   late final Dio _dio;
 
   ApiService() {
