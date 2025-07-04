@@ -2,12 +2,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app/app_module.dart';
-import 'repositories/i_news_repository.dart';
-import 'repositories/impl/news_repository_impl.dart';
-import 'services/i_news_service.dart';
-import 'services/impl/news_service_impl.dart';
-import 'ui/pages/news_home_page.dart';
-import 'ui/viewmodels/news_viewmodel.dart';
+import 'data/repositories/i_news_repository.dart';
+import 'data/repositories/impl/news_repository_impl.dart';
+import 'data/services/i_news_service.dart';
+import 'data/services/impl/news_service_impl.dart';
+import 'stores/news_store.dart';
+import 'ui/pages/news_page.dart';
 
 class NewsModule extends Module {
   @override
@@ -23,13 +23,13 @@ class NewsModule extends Module {
     i.addLazySingleton<INewsRepository>(
       () => NewsRepositoryImpl(iNewsService: i()),
     );
-    i.add(() => NewsViewmodel(iNewsRepository: i()));
+    i.add(() => NewsStore(iNewsRepository: i()));
   }
 
   @override
   void routes(RouteManager r) {
     super.routes(r);
 
-    r.child("/", child: (_) => NewsHomePage());
+    r.child("/", child: (_) => NewsPage());
   }
 }

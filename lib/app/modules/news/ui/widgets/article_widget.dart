@@ -1,41 +1,49 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:new_flutter_arch_app/app/modules/news/models/article_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../viewmodels/news_viewmodel.dart';
+import '../../models/article_model.dart';
+import 'article_shime_widget.dart';
 
-class NewsHomePage extends StatefulWidget {
-  const NewsHomePage({super.key});
+class ArticleWidget extends StatelessWidget {
+  final ArticleModel article;
+  final bool isLoading;
 
-  @override
-  State<NewsHomePage> createState() => _NewsHomePageState();
-}
+  const ArticleWidget({
+    super.key,
+    required this.article,
+    this.isLoading = false,
+  });
 
-class _NewsHomePageState extends State<NewsHomePage> {
-  final newsViewmodel = Modular.get<NewsViewmodel>();
-
-  @override
-  void initState() {
-    super.initState();
-
-    newsViewmodel.getTopHeadlinesArticlesCommand.execute();
-
-    newsViewmodel.addListener(() {
-      setState(() {});
-    });
+  factory ArticleWidget.loading() {
+    return ArticleWidget(article: ArticleModel.empty(), isLoading: true);
   }
 
-  _buildArticleTile(ArticleModel article) {
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return const ArticleShimmerWidget();
+    }
+
     return Container(
       margin: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            article.urlToImage ??
-                'https://edmo.eu/wp-content/uploads/2023/04/EDMO-AI-COVER-thegem-blog-default-large.jpg',
-            fit: BoxFit.cover,
+          Center(
+            child: CachedNetworkImage(
+              imageUrl:
+                  article.urlToImage ??
+                  'https://edmo.eu/wp-content/uploads/2023/04/EDMO-AI-COVER-thegem-blog-default-large.jpg',
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                    ),
+                  ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
           ),
           const SizedBox(height: 8.0),
           ListTile(
@@ -70,7 +78,7 @@ class _NewsHomePageState extends State<NewsHomePage> {
                 ),
                 const SizedBox(height: 8.0),
                 Text(
-                  'Fonte: ${article.source.name ?? 'Fonte desconhecida'}',
+                  'Fonte: ${article.source?.name ?? 'Fonte desconhecida'}',
                   style: const TextStyle(fontSize: 13.0, color: Colors.grey),
                 ),
               ],
@@ -97,43 +105,6 @@ class _NewsHomePageState extends State<NewsHomePage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('News Page')),
-      body: Center(
-        child: ListenableBuilder(
-          listenable: newsViewmodel.getTopHeadlinesArticlesCommand,
-          builder: (context, child) {
-            if (newsViewmodel.getTopHeadlinesArticlesCommand.isExecuting) {
-              return const CircularProgressIndicator();
-            }
-
-            if (newsViewmodel.getTopHeadlinesArticlesCommand.isFailure) {
-              return Text(
-                'Error: ${newsViewmodel.error}',
-                style: TextStyle(color: Colors.red),
-              );
-            }
-
-            final articles = newsViewmodel.topHeadlinesArticles;
-
-            return ListView.builder(
-              itemCount: articles.length,
-              itemBuilder: (context, index) {
-                final article = articles[index];
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: _buildArticleTile(article),
-                );
-              },
-            );
-          },
-        ),
       ),
     );
   }

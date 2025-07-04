@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../../../shared/command.dart';
-import '../../../../shared/result.dart';
-import '../../models/article_model.dart';
-import '../../repositories/i_news_repository.dart';
+import '../../../shared/command.dart';
+import '../../../shared/result.dart';
+import '../models/article_model.dart';
+import '../data/repositories/i_news_repository.dart';
 
-class NewsViewmodel extends ChangeNotifier {
+class NewsStore extends ChangeNotifier {
   INewsRepository iNewsRepository;
   late final Command0<List<ArticleModel>, String>
   getTopHeadlinesArticlesCommand;
 
-  NewsViewmodel({required this.iNewsRepository}) {
+  NewsStore({required this.iNewsRepository}) {
     getTopHeadlinesArticlesCommand = Command0<List<ArticleModel>, String>(
       _getTopHeadlinesArticles,
     );

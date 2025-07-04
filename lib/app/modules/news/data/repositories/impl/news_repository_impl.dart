@@ -1,5 +1,5 @@
-import '../../../../shared/result.dart';
-import '../../models/article_model.dart';
+import '../../../../../shared/result.dart';
+import '../../../models/article_model.dart';
 import '../../services/i_news_service.dart';
 import '../i_news_repository.dart';
 

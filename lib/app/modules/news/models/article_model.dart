@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'article_source_model.dart';
 
 class ArticleModel {
-  ArticleSourceModel source;
+  ArticleSourceModel? source;
   String? author;
   String? title;
   String? description;
@@ -14,7 +14,7 @@ class ArticleModel {
   String? content;
 
   ArticleModel({
-    required this.source,
+    this.source,
     this.author,
     this.title,
     this.description,
@@ -48,7 +48,7 @@ class ArticleModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'source': source.toMap(),
+      'source': source?.toMap() ?? ArticleSourceModel.empty().toMap(),
       'author': author,
       'title': title,
       'description': description,
