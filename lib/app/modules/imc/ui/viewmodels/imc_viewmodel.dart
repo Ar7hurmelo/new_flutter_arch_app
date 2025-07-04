@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:new_flutter_arch_app/app/modules/imc/shared/command.dart';
+import 'package:new_flutter_arch_app/app/shared/command.dart';
 
-import '../shared/models/pessoa_model.dart';
-import '../repositories/imc_repository.dart';
-import '../shared/result.dart';
+import '../../models/pessoa_model.dart';
+import '../../repositories/imc_repository.dart';
+import '../../../../shared/result.dart';
 
 class ImcViewmodel extends ChangeNotifier {
   final ImcRepository imcRepository;
@@ -39,7 +39,6 @@ class ImcViewmodel extends ChangeNotifier {
     );
 
     notifyListeners();
-
     return result;
   }
 }

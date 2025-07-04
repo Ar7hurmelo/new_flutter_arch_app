@@ -3,9 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app/app_module.dart';
 import 'repositories/imc_repository.dart';
-import 'repositories/local_imc_repository_impl.dart';
+import 'repositories/impl/local_imc_repository_impl.dart';
 import 'ui/pages/imc_home_page.dart';
-import 'viewmodels/imc_viewmodel.dart';
+import 'ui/viewmodels/imc_viewmodel.dart';
 
 class ImcModule extends Module {
   @override
