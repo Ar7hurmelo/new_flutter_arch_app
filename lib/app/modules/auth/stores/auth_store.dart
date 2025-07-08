@@ -78,12 +78,18 @@ class AuthStore extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await iAuthRepository.logout();
-    Modular.to.pushNamedAndRemoveUntil('/', (_) => false);
-  }
+    var result = await iAuthRepository.logout();
 
-  // Future<bool> checkUserLoggedToRouter(String user) async {
-  //   userLog = prefs.getString('login') ?? '';
-  //   return userLog == user;
-  // }
+    result.fold(
+      (success) {
+        loggedUser = null;
+        error = '';
+        Modular.to.pushNamedAndRemoveUntil('/', (_) => false);
+      },
+      (failure) {
+        error = failure;
+        notifyListeners();
+      },
+    );
+  }
 }

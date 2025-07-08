@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../shared/command.dart';
 import '../../../shared/result.dart';
 import '../../auth/stores/auth_store.dart';
-import '../models/article_model.dart';
 import '../data/repositories/i_news_repository.dart';
+import '../models/article_model.dart';
 
 class NewsStore extends ChangeNotifier {
   final INewsRepository iNewsRepository;
@@ -39,7 +39,7 @@ class NewsStore extends ChangeNotifier {
     return result;
   }
 
-  Future<void> logout() async {
-    await authStore.logout();
+  void logout() {
+    authStore.logout();
   }
 }

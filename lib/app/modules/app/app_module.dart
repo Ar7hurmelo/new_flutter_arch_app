@@ -31,12 +31,12 @@ class AppModule extends Module {
 
   @override
   void exportedBinds(i) {
-    i.addLazySingleton<IAuthService>(
+    i.addSingleton<IAuthService>(
       () => AuthServiceImpl(),
     ); //authApiService: i())
-    i.addLazySingleton<IAuthRepository>(
+    i.addSingleton<IAuthRepository>(
       () => AuthRepositoryImpl(iAuthService: i(), sharedPreferences: i()),
     );
-    i.addLazySingleton(() => AuthStore(iAuthRepository: i()));
+    i.addSingleton(() => AuthStore(iAuthRepository: i()));
   }
 }

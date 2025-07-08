@@ -11,6 +11,7 @@ class AuthGuard extends RouteGuard {
   FutureOr<bool> canActivate(String path, ParallelRoute route) async {
     final authStore = Modular.get<AuthStore>();
 
-    return await authStore.checkUserLogged();
+    var result = await authStore.checkUserLogged();
+    return result;
   }
 }
