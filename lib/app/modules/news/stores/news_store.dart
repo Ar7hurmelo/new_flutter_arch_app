@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../../shared/command.dart';
 import '../../../shared/result.dart';
+import '../../auth/stores/auth_store.dart';
 import '../models/article_model.dart';
 import '../data/repositories/i_news_repository.dart';
 
 class NewsStore extends ChangeNotifier {
-  INewsRepository iNewsRepository;
+  final INewsRepository iNewsRepository;
+  final AuthStore authStore;
+
   late final Command0<List<ArticleModel>, String>
   getTopHeadlinesArticlesCommand;
 
-  NewsStore({required this.iNewsRepository}) {
+  NewsStore({required this.authStore, required this.iNewsRepository}) {
     getTopHeadlinesArticlesCommand = Command0<List<ArticleModel>, String>(
       _getTopHeadlinesArticles,
     );
@@ -34,5 +37,9 @@ class NewsStore extends ChangeNotifier {
 
     notifyListeners();
     return result;
+  }
+
+  Future<void> logout() async {
+    await authStore.logout();
   }
 }

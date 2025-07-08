@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:new_flutter_arch_app/app/modules/news/models/article_model.dart';
 
+import '../../../auth/ui/widgets/logout_icon_button.dart';
 import '../../stores/news_store.dart';
 import '../widgets/article_widget.dart';
 
@@ -47,8 +48,21 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   Widget build(BuildContext context) {
+    var username = newsStore.authStore.loggedUser?.name ?? 'Usuário';
+
     return Scaffold(
-      appBar: AppBar(title: const Text('News Page')),
+      appBar: AppBar(
+        title: Text('Bem vindo, $username!'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () {
+              newsStore.logout();
+            },
+          ),
+          //LogoutIconButton(),
+        ],
+      ),
       body: Center(
         child: ListenableBuilder(
           listenable: newsStore.getTopHeadlinesArticlesCommand,

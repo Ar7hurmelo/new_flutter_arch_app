@@ -23,7 +23,7 @@ class NewsModule extends Module {
     i.addLazySingleton<INewsRepository>(
       () => NewsRepositoryImpl(iNewsService: i()),
     );
-    i.add(() => NewsStore(iNewsRepository: i()));
+    i.add(() => NewsStore(authStore: i(), iNewsRepository: i()));
   }
 
   @override
