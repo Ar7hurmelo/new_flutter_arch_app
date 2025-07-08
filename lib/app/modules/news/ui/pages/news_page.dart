@@ -53,15 +53,7 @@ class _NewsPageState extends State<NewsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Bem vindo, $username!'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () {
-              newsStore.logout();
-            },
-          ),
-          //LogoutIconButton(),
-        ],
+        actions: [LogoutIconButton()],
       ),
       body: Center(
         child: ListenableBuilder(
