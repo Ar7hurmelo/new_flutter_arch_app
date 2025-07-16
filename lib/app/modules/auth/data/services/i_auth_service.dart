@@ -1,11 +1,10 @@
-import '../../../../shared/result.dart';
 import '../../models/logged_user_model.dart';
 
 abstract class IAuthService {
-  Future<Result<String, String>> getUserToken({
+  Future<String> getUserToken({
     required String username,
     required String password,
   });
 
-  Future<Result<LoggedUserModel, String>> getUserData(String userToken);
+  Future<LoggedUserModel> getUserData(String userToken);
 }

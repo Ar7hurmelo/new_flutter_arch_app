@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:new_flutter_arch_app/app/modules/auth/stores/auth_store.dart';
+import 'package:result_command/result_command.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
 
@@ -39,15 +40,14 @@ class _AuthPageState extends State<AuthPage> {
         child: ListenableBuilder(
           listenable: authStore.loginCommand,
           builder: (context, child) {
-            if (!authStore.loginCommand.isExecuting &&
-                authStore.loginCommand.isFailure) {
+            final status = authStore.loginCommand.value;
+
+            if (status is FailureCommand && authStore.loggedUser == null) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 _buildError(context);
               });
-            }
-
-            if (!authStore.loginCommand.isExecuting &&
-                authStore.loginCommand.isSuccess) {
+            } else if (status is SuccessCommand &&
+                authStore.loggedUser != null) {
               Modular.to.navigate('/news/');
             }
 
@@ -80,18 +80,16 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   const SizedBox(height: 32),
                   AuthButton(
-                    text: authStore.loginCommand.isExecuting
-                        ? 'Carregando...'
-                        : 'Entrar',
-                    backgroundColor: authStore.loginCommand.isExecuting
+                    text: status is RunningCommand ? 'Carregando...' : 'Entrar',
+                    backgroundColor: status is RunningCommand
                         ? Colors.grey
                         : null,
                     onPressed: () {
-                      if (!authStore.loginCommand.isExecuting) {
-                        authStore.loginCommand.execute({
-                          'usuario': _userController.text,
-                          'senha': _passwordController.text,
-                        });
+                      if (status is! RunningCommand) {
+                        authStore.loginCommand.execute(
+                          _userController.text,
+                          _passwordController.text,
+                        );
                       } else {
                         null;
                       }

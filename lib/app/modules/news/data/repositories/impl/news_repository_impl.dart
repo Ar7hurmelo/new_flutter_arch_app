@@ -1,5 +1,6 @@
-import '../../../../../shared/result.dart';
-import '../../../models/article_model.dart';
+import 'package:new_flutter_arch_app/app/modules/news/models/article_model.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../../services/i_news_service.dart';
 import '../i_news_repository.dart';
 
@@ -9,12 +10,12 @@ class NewsRepositoryImpl implements INewsRepository {
   NewsRepositoryImpl({required this.iNewsService});
 
   @override
-  Future<Result<List<ArticleModel>, String>> getTopHeadlinesArticles() async {
+  AsyncResult<List<ArticleModel>> getTopHeadlinesArticles() async {
     try {
       final articles = await iNewsService.getTopHeadlinesArticles();
       return Success(articles);
-    } catch (e) {
-      return Failure('Failed to load top headlines: $e');
+    } on Exception catch (e) {
+      return Failure(e);
     }
   }
 }

@@ -31,9 +31,7 @@ class AppModule extends Module {
 
   @override
   void exportedBinds(i) {
-    i.addSingleton<IAuthService>(
-      () => AuthServiceImpl(),
-    ); //authApiService: i())
+    i.addSingleton<IAuthService>(() => AuthServiceImpl(authApiService: i()));
     i.addSingleton<IAuthRepository>(
       () => AuthRepositoryImpl(iAuthService: i(), sharedPreferences: i()),
     );
