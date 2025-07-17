@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:new_flutter_arch_app/app/modules/news/models/article_model.dart';
+import 'package:result_command/result_command.dart';
 
 import '../../../auth/ui/widgets/logout_icon_button.dart';
 import '../../stores/news_store.dart';
@@ -59,14 +60,16 @@ class _NewsPageState extends State<NewsPage> {
         child: ListenableBuilder(
           listenable: newsStore.getTopHeadlinesArticlesCommand,
           builder: (context, child) {
+            final status = newsStore.getTopHeadlinesArticlesCommand.value;
+
             return CustomScrollView(
               slivers: [
-                if (newsStore.getTopHeadlinesArticlesCommand.isExecuting)
+                if (status is RunningCommand)
                   _buildLoadingIndicator()
-                else if (newsStore.getTopHeadlinesArticlesCommand.isFailure)
+                else if (status is FailureCommand)
                   _buildError()
                 else
-                  _buildArticles(newsStore.topHeadlinesArticles),
+                  _buildArticles(newsStore.topHeadlinesArticleList),
               ],
             );
           },

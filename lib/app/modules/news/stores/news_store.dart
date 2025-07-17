@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:result_command/result_command.dart';
+import 'package:result_dart/result_dart.dart';
 
-import '../../../shared/command.dart';
-import '../../../shared/result.dart';
 import '../../auth/stores/auth_store.dart';
 import '../data/repositories/i_news_repository.dart';
 import '../models/article_model.dart';
@@ -10,28 +10,25 @@ class NewsStore extends ChangeNotifier {
   final INewsRepository iNewsRepository;
   final AuthStore authStore;
 
-  late final Command0<List<ArticleModel>, String>
-  getTopHeadlinesArticlesCommand;
+  late final getTopHeadlinesArticlesCommand = Command0(
+    _getTopHeadlinesArticles,
+  );
 
-  NewsStore({required this.authStore, required this.iNewsRepository}) {
-    getTopHeadlinesArticlesCommand = Command0<List<ArticleModel>, String>(
-      _getTopHeadlinesArticles,
-    );
-  }
+  NewsStore({required this.authStore, required this.iNewsRepository});
 
-  var topHeadlinesArticles = <ArticleModel>[];
+  var topHeadlinesArticleList = <ArticleModel>[];
   var error = '';
 
-  Future<Result<List<ArticleModel>, String>> _getTopHeadlinesArticles() async {
+  AsyncResult<List<ArticleModel>> _getTopHeadlinesArticles() async {
     final result = await iNewsRepository.getTopHeadlinesArticles();
 
     result.fold(
       (success) {
-        topHeadlinesArticles = success;
+        topHeadlinesArticleList = success;
       },
       (failure) {
-        error = failure;
-        topHeadlinesArticles = [];
+        error = 'Erro ao buscar artigos: ${failure.toString()} ';
+        topHeadlinesArticleList = [];
       },
     );
 

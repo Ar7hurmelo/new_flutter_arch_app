@@ -1,6 +1,6 @@
+import 'package:result_dart/result_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../../shared/result.dart';
 import '../../../models/logged_user_model.dart';
 import '../../services/i_auth_service.dart';
 import '../i_auth_repository.dart';
@@ -15,7 +15,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   });
 
   @override
-  Future<Result<String, String>> getUserToken({
+  AsyncResult<String> getUserToken({
     required String username,
     required String password,
   }) async {
@@ -25,68 +25,55 @@ class AuthRepositoryImpl implements IAuthRepository {
         password: password,
       );
 
-      return result;
-    } catch (e) {
-      return Failure<String, String>(
-        'Erro ao obter token do usuário: ${e.toString()}',
-      );
+      return Success(result);
+    } on Exception catch (e) {
+      return Failure(e);
     }
   }
 
   @override
-  Future<Result<LoggedUserModel, String>> getUserDataByToken(
-    String userToken,
-  ) async {
+  AsyncResult<LoggedUserModel> getUserDataByToken(String userToken) async {
     try {
-      var result = await iAuthService.getUserData(userToken);
-      var loggedUser = result.getOrNull();
-
-      if (loggedUser == null) {
-        return Failure<LoggedUserModel, String>(
-          result.getErrorOrNull() ?? 'Erro ao obter Token',
-        );
-      } else {
-        await saveUserData(loggedUser);
-        return Success(loggedUser);
-      }
-    } catch (e) {
-      return Failure<LoggedUserModel, String>(
-        'Erro ao obter dados do usuário: ${e.toString()}',
-      );
+      var loggedUser = await iAuthService.getUserData(userToken);
+      await saveUserData(loggedUser);
+      return Success(loggedUser);
+    } on Exception catch (e) {
+      return Failure(e);
     }
   }
 
   Future<void> saveUserData(LoggedUserModel loggedUser) async {
     try {
       await sharedPreferences.setString('logged_user', loggedUser.toJson());
-    } catch (e) {
+    } on Exception catch (e) {
       throw Exception('Erro ao salvar dados do usuário: ${e.toString()}');
     }
   }
 
   @override
-  Future<LoggedUserModel?> getLoggedUser() async {
-    LoggedUserModel? loggedUser;
+  AsyncResult<LoggedUserModel> getLoggedUser() async {
+    LoggedUserModel loggedUser;
 
     try {
       String? userDataJson = sharedPreferences.getString('logged_user');
       if (userDataJson != null) {
         loggedUser = LoggedUserModel.fromJson(userDataJson);
+        return Success(loggedUser);
+      } else {
+        return Failure(Exception('Usuário não encontrado'));
       }
-    } catch (e) {
-      print(e.toString());
+    } on Exception catch (e) {
+      return Failure(e);
     }
-
-    return loggedUser;
   }
 
   @override
-  Future<Result<bool, String>> logout() async {
+  AsyncResult<bool> logout() async {
     try {
       await sharedPreferences.remove('logged_user');
       return Success(true);
-    } catch (e) {
-      return Failure('Erro ao fazer logout: ${e.toString()}');
+    } on Exception catch (e) {
+      return Failure(e);
     }
   }
 }

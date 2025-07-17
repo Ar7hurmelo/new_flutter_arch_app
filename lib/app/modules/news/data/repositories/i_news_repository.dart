@@ -1,6 +1,7 @@
-import '../../../../shared/result.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../../models/article_model.dart';
 
 abstract class INewsRepository {
-  Future<Result<List<ArticleModel>, String>> getTopHeadlinesArticles();
+  AsyncResult<List<ArticleModel>> getTopHeadlinesArticles();
 }
