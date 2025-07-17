@@ -16,9 +16,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: Fluo.init('QCj_u0p0ah0kvzXyR2DkyEmiQr_mvUcZyPEIqBPWRg4='),
-        builder: (context, snapshot) {
+      body: Builder(
+        builder: (context) {
+          // Check if Fluo is initialized
           if (!Fluo.isInitialized) {
             return const Scaffold();
           }
