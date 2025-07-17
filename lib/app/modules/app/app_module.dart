@@ -9,6 +9,7 @@ import '../auth/data/services/i_auth_service.dart';
 import '../auth/data/services/impl/auth_service_impl.dart';
 import '../auth/stores/auth_store.dart';
 import '../news/news_module.dart';
+import '../splash_module/splash_module.dart';
 import 'core_module.dart';
 
 class AppModule extends Module {
@@ -25,7 +26,8 @@ class AppModule extends Module {
   void routes(RouteManager r) {
     super.routes(r);
 
-    r.module("/", module: AuthModule());
+    r.module("/", module: SplashModule());
+    r.module("/auth", module: AuthModule());
     r.module("/news", module: NewsModule(), guards: [AuthGuard()]);
   }
 
