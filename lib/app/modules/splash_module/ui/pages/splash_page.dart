@@ -12,6 +12,10 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
+void redirectToConnectedPage() {
+  Modular.to.pushReplacementNamed('/connected');
+}
+
 class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
         builder: (context) {
           // Check if Fluo is initialized
           if (!Fluo.isInitialized) {
-            return const Scaffold();
+            return Center(child: CircularProgressIndicator());
           }
 
           if (!Fluo.instance.isUserReady()) {
@@ -30,17 +34,18 @@ class _SplashPageState extends State<SplashPage> {
                 // 1. Initialize the Supabase client somewhere in your code
                 // 2. Use 'recoverSession' as below:
                 final session = Fluo.instance.session!;
-                await Supabase.instance.client.auth.recoverSession(
-                  session.supabaseSession!,
-                );
-                if (mounted) {
-                  Modular.to.pushNamed('/connected');
+                var authResponse = await Supabase.instance.client.auth
+                    .recoverSession(session.supabaseSession!);
+                if (mounted && authResponse.user?.id != null) {
+                  redirectToConnectedPage();
                 }
               },
             );
+          } else {
+            redirectToConnectedPage();
           }
 
-          return Container();
+          return Center(child: Text('Splash Page'));
         },
       ),
     );

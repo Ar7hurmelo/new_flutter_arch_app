@@ -8,7 +8,7 @@ class ConnectedPage extends StatelessWidget {
   void onSignOut() async {
     // Clear the session and navigate back to the splash page
     await Fluo.instance.clearSession();
-    Modular.to.navigate('/');
+    Modular.to.pushNamedAndRemoveUntil('/', (route) => false);
   }
 
   @override
